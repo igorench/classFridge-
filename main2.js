@@ -1,6 +1,7 @@
 "use strict";
 
 function Machine(power) {
+    this._power = power;
     this._enabled = false;
 
     this.enable = function () {
@@ -19,7 +20,7 @@ function Fridge(power) {
     var MAXIMUM_FOOD = power / 100;
 
 
-    this.addFood = function (item) {
+    this.addFood = function () {
         if (!this._enabled) {
             throw new Error("Когда холодильник выключен вы не можете добавлять еду!");
         }
@@ -31,13 +32,22 @@ function Fridge(power) {
             food.push(item);
         });
     };
+
     this.getFood = function () {
-        return food;
+        // Иетод slice позволяет легко скопировать массив 
+        return food.slice();
     }
 }
 
-var fridge = new Fridge(300);
+var fridge = new Fridge(500);
 fridge.enable();
-fridge.addFood("котлета", "сыр"); // ошибка, холодильник выключен
-fridge.addFood("яблоко", "курица", "капуста");
-console.log(fridge.getFood());
+fridge.addFood("котлета");
+fridge.addFood("сок", "варенье");
+
+var fridgeFood = fridge.getFood();
+alert( fridgeFood ); // котлета, сок, варенье
+
+// добавление элементов не влияет на еду в холодильнике
+fridgeFood.push("вилка", "ложка");
+
+alert( fridge.getFood() ); // внутри по-прежнему: котлета, сок, варенье
