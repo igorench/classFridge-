@@ -4,12 +4,13 @@ function Machine(power) {
     this._power = power;
     this._enabled = false;
 
+    var self = this;
     this.enable = function () {
-        this._enabled = true;
+        self._enabled = true;
     };
 
     this.disable = function () {
-        this._enabled = false;
+        self._enabled = false;
     };
 }
 
@@ -19,6 +20,15 @@ function Fridge(power) {
     var food = [];
     var MAXIMUM_FOOD = power / 100;
 
+
+    var parentDisable = this.disable;
+    this.disable = function () {
+        if (food.length) {
+            throw new Error("Вы не можете выключить холодильник, т.к. в нем есть еда");
+        }
+
+        parentDisable();
+    };
 
     this.addFood = function () {
         if (!this._enabled) {
@@ -53,32 +63,5 @@ function Fridge(power) {
 
 var fridge = new Fridge(500);
 fridge.enable();
-fridge.addFood({
-    title: "котлета",
-    calories: 100
-});
-fridge.addFood({
-    title: "сок",
-    calories: 30
-});
-fridge.addFood({
-    title: "зелень",
-    calories: 10
-});
-fridge.addFood({
-    title: "варенье",
-    calories: 150
-});
-
-fridge.removeFood("варенье");
-console.log(fridge.getFood());
-fridge.removeFood("зелень");
-console.log(fridge.getFood());
-
-console.log( fridge.filterFood(function(item) {
-    if (item.calories < 50) {
-        return true;
-    }
-}));
-
-
+//fridge.addFood("кус-кус");
+fridge.disable(); // ошибка, в холодильнике есть еда
