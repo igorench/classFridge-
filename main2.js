@@ -41,6 +41,14 @@ function Fridge(power) {
     this.filterFood = function(func) {
         return food.filter(func);
     };
+
+    this.removeFood = function(item) {
+        food.forEach(function(el, i) {
+            if (el.title === item) {
+                food.splice(i, 1);
+            }
+        })
+    }
 }
 
 var fridge = new Fridge(500);
@@ -62,9 +70,15 @@ fridge.addFood({
     calories: 150
 });
 
+fridge.removeFood("варенье");
+console.log(fridge.getFood());
+fridge.removeFood("зелень");
+console.log(fridge.getFood());
 
-console.log(fridge.filterFood(function(item) {
-    if (item.calories <= 30) {
+console.log( fridge.filterFood(function(item) {
+    if (item.calories < 50) {
         return true;
     }
 }));
+
+
